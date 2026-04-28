@@ -88,8 +88,9 @@ contract BondContract is Initializable, ReentrancyGuardUpgradeable, IBondContrac
         protocolFeeBps = protocolFeeBps_;
         for (uint256 i = 0; i < whitelist_.length;) { whitelist[whitelist_[i]] = true; unchecked { ++i; } }
         // Pre-approve bondNFT once so claims never need an inline cross-contract call.
-        // Safe: bondNFT is a trusted immutable module set by the factory.
-        IERC20(params.principalToken).approve(bondNFT_, type(uint256).max);
+        // forceApprove resets allowance to 0 before setting — safe for USDT-style tokens
+        // that revert when approving from a non-zero allowance.
+        IERC20(params.principalToken).forceApprove(bondNFT_, type(uint256).max);
     }
 
     function currentPrice() public view returns (uint256 price18) {
@@ -227,6 +228,8 @@ contract BondContract is Initializable, ReentrancyGuardUpgradeable, IBondContrac
                 ? paymentAmount / (10 ** (payDec - 18))
                 : paymentAmount;
 
+        // Integer division truncates — sub-unit dust stays in the contract (standard fixed-point behavior).
+        // The fee is taken on the full paymentAmount before this division, so dust never accrues to the buyer.
         principalAmount      = paymentAmount18 * 1e18 / effectivePrice;
         effectiveDiscountBps = 10_000 - (effectivePrice * 10_000 / basePrice);
     }

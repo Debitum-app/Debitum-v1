@@ -10,6 +10,10 @@ import {IBondFactory}  from "./interfaces/IBondFactory.sol";
 import {IBondContract} from "./interfaces/IBondContract.sol";
 
 interface IBondNFTRegister { function registerBond(address bondContract) external; }
+interface IPriceFeedProbe {
+    function decimals() external view returns (uint8);
+    function latestRoundData() external view returns (uint80, int256, uint256, uint256, uint80);
+}
 
 /// @notice Immutable factory — modules and bond implementation cannot be changed after deploy.
 ///         A new factory version means a new deployment, not an upgrade.
@@ -20,6 +24,8 @@ contract BondFactory is Initializable, AccessControlUpgradeable, ReentrancyGuard
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     uint256 public constant MAX_FEE_BPS = 500;
+    /// @dev Upper bound on maxPriceAge — prevents stale-oracle window from being set to infinity.
+    uint32  public constant MAX_PRICE_AGE = 86_400; // 1 day
 
     address public bondImplementation;
     address public vestingModule;
@@ -66,6 +72,16 @@ contract BondFactory is Initializable, AccessControlUpgradeable, ReentrancyGuard
         if (params.minPurchasePrincipal > params.maxPurchasePrincipal)       revert InvalidCapacity();
         if (params.maxPurchasePrincipal > params.capacityInPrincipal)        revert InvalidCapacity();
         if (params.priceFeed == address(0) && params.pricePerPrincipal == 0) revert InvalidPrice();
+        if (params.priceFeed != address(0)) {
+            // maxPriceAge must not exceed the global cap (prevents infinite staleness windows)
+            if (params.maxPriceAge > MAX_PRICE_AGE) revert InvalidPrice();
+            // Probe the feed: revert if it doesn't respond or returns a non-positive price
+            try IPriceFeedProbe(params.priceFeed).decimals() returns (uint8) {}
+            catch { revert InvalidPrice(); }
+            try IPriceFeedProbe(params.priceFeed).latestRoundData() returns (uint80, int256 answer, uint256, uint256, uint80) {
+                if (answer <= 0) revert InvalidPrice();
+            } catch { revert InvalidPrice(); }
+        }
 
         bond = bondImplementation.clone();
         IBondContract(bond).initialize(params, msg.sender, whitelist, vestingModule, bondNFT, tokenGate, feeCollector, protocolFeeBps);
