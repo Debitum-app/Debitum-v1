@@ -196,7 +196,7 @@ contract BondContract is Initializable, ReentrancyGuardUpgradeable, IBondContrac
         IVestingModule.Schedule memory schedule = vestingModule.buildSchedule(
             cfg.vestingType, _vestingParams, uint128(principalAmount), uint64(block.timestamp)
         );
-        tokenId = bondNFT.mint(buyer, address(this), schedule, cfg.paymentToken, uint128(paymentAmount));
+        tokenId = bondNFT.mint(buyer, address(this), schedule, cfg.principalToken, cfg.paymentToken, uint128(paymentAmount));
         emit BondPurchased(buyer, paymentAmount, principalAmount, effectiveDiscountBps, tokenId);
     }
 

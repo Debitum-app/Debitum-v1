@@ -53,10 +53,11 @@ interface IBondNFT {
     error NothingToClaim();
     error NotBondContract();
 
-    function mint(address to, address bondContract, IVestingModule.Schedule calldata schedule, address paymentToken, uint128 purchasePrice) external returns (uint256 tokenId);
+    function mint(address to, address bondContract, IVestingModule.Schedule calldata schedule, address principalToken, address paymentToken, uint128 purchasePrice) external returns (uint256 tokenId);
     function claim(uint256 tokenId) external;
     function claimable(uint256 tokenId) external view returns (uint128);
     function position(uint256 tokenId) external view returns (Position memory);
+    function nextTokenId() external view returns (uint256);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

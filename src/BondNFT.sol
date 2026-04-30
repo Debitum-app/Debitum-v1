@@ -115,22 +115,11 @@ contract BondNFT is
         address to,
         address bondContract,
         IVestingModule.Schedule calldata schedule,
+        address principalToken,
         address paymentToken,
         uint128 purchasePrice
     ) external onlyRole(MINTER_ROLE) returns (uint256 tokenId) {
         tokenId = _nextTokenId++;
-
-        // Resolve principal token from the bond contract's config
-        // We call a minimal selector — avoids importing the full IBondContract
-        (bool ok, bytes memory data) = bondContract.staticcall(
-            abi.encodeWithSignature("config()")
-        );
-        address principalToken;
-        if (ok && data.length >= 96) {
-            // config() returns BondConfig struct; principalToken is the 3rd field
-            // Memory layout of bytes: [32b length][32b creator][32b paymentToken][32b principalToken...]
-            assembly { principalToken := mload(add(data, 96)) }
-        }
 
         // Snapshot the vestingModule address from the bond contract.
         // This permanently binds this position to the exact vesting logic
