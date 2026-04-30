@@ -41,7 +41,7 @@ contract BondNFTTest is Fixtures {
         IVestingModule.Schedule memory s;
         vm.prank(buyer);
         vm.expectRevert();
-        nft.mint(buyer, bond, s, address(payment), 100e6);
+        nft.mint(buyer, bond, s, address(principal), address(payment), 100e6);
     }
 
     // ── claim ─────────────────────────────────────────────────────────────────
