@@ -1,0 +1,24 @@
+{
+  "network": "ethereum-sepolia",
+  "chainId": 11155111,
+  "deployer": "0xE6108b8952448d4a42CCF23cefA1d183D9681B32",
+  "admin": "0xE6108b8952448d4a42CCF23cefA1d183D9681B32",
+  "feeCollector": "0xE6108b8952448d4a42CCF23cefA1d183D9681B32",
+  "protocolFeeBps": 0,
+  "contracts": {
+    "BondFactory": {
+      "proxy": "0x87d1D1f0BeD70EE12fB3A30fB9093Fefd717cfAa",
+      "implementation": "0x3fC0b3B0bBbe1BeE1a5326964d0afC247b357C00"
+    },
+    "BondNFT": {
+      "proxy": "0xfdBf3EdF39cB48438722f504a3e09caDDcF247b6",
+      "implementation": "0x5aE618657e8347D2Fb999799Af3440e6945b200E"
+    },
+    "VestingModule": "0x22c833Ad10450e172E05DeB67f9578F36C7C0DE9",
+    "TokenGate": "0x9DfF64b9CAB569f3eB4B1eEBD2Cd3ba84065299b",
+    "BondContract": "0x64Bb1Af9f74EfE4530fAd978737198E63014Cd83",
+    "VestingDistributor": "0xb63f18b93ac4EE0251E2Cb338Ac19c896aDb2798"
+  },
+  "explorer": "https://sepolia.etherscan.io",
+  "verified": true
+}
