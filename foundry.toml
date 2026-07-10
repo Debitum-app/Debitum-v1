@@ -10,7 +10,9 @@ via_ir = true
 [rpc_endpoints]
 base    = "https://mainnet.base.org"
 sepolia = "${SEPOLIA_RPC_URL}"
+mainnet = "${MAINNET_RPC_URL}"
 
 [etherscan]
 base    = { key = "${BASESCAN_API_KEY}", url = "https://api.basescan.org/api" }
 sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 11155111 }
+mainnet = { key = "${ETHERSCAN_API_KEY}", chain = 1 }

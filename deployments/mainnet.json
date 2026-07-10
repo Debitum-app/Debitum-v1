@@ -1,0 +1,25 @@
+{
+  "network": "ethereum-mainnet",
+  "chainId": 1,
+  "deployer": "0xE6108b8952448d4a42CCF23cefA1d183D9681B32",
+  "admin": "0xE6108b8952448d4a42CCF23cefA1d183D9681B32",
+  "feeCollector": "0xE6108b8952448d4a42CCF23cefA1d183D9681B32",
+  "protocolFeeBps": 0,
+  "contracts": {
+    "BondFactory": {
+      "proxy": "0xd1Ce0FB550B9e2565F478388Dd879149E5c02726",
+      "implementation": "0x87d1D1f0BeD70EE12fB3A30fB9093Fefd717cfAa"
+    },
+    "BondNFT": {
+      "proxy": "0x3fC0b3B0bBbe1BeE1a5326964d0afC247b357C00",
+      "implementation": "0xfdBf3EdF39cB48438722f504a3e09caDDcF247b6"
+    },
+    "VestingModule": "0x9dFF64b9CAB569f3eB4B1eEBD2Cd3ba84065299b",
+    "TokenGate": "0x64Bb1Af9f74EfE4530fAd978737198E63014Cd83",
+    "BondContract": "0x5aE618657e8347D2Fb999799Af3440e6945b200E",
+    "VestingDistributor": "0x176ef91f1eB556c389fcB1787Cb16bf12cdcb053"
+  },
+  "notes": "REGISTRAR_ROLE granted to factory in a separate tx 0x50cdf92e9b2446f2ce669bba2ea1a70d4f801d4b7456ea221b1f971d58b7e2bf after the scripted grant did not take effect during --slow broadcast. VestingDistributor deployed separately with MINTER_ROLE on BondNFT.",
+  "explorer": "https://etherscan.io",
+  "verified": true
+}
